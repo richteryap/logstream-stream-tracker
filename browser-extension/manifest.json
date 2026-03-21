@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "LogStream",
+  "version": "1.0",
+  "description": "Beams stream titles to Python.",
+  "content_scripts": [
+    {
+      "matches": ["*://*.animeheaven.me/*", "*://animeheaven.me/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "host_permissions": [
+    "http://127.0.0.1:5000/*",
+    "http://localhost:5000/*"
+  ]
+}

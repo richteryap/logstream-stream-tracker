@@ -1,0 +1,18 @@
+Flask
+Flask-Cors
+pyngrok
+
+# === activate virtual environment ===
+# python -m venv .venv
+
+# === install dependencies ===
+# pip install -r requirements.txt
+
+# === bookmarklet for mobile ===
+# javascript:(function(){let htmlElement=document.querySelector('.linetitle3');if(htmlElement){let rawTitle=htmlElement.innerText;let cleanTitle=rawTitle.replace(/"/g,'').replace(/\n/g,' ').replace(/\s+/g,' ').trim();fetch('https://YOUR_NGROK_URL_HERE.ngrok-free.app/stream-update',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:cleanTitle})}).then(response=>alert("Beamed through Ngrok to PC!")).catch(error=>alert("Network Error. Is Python running?"));}else{alert("Title not found.");}})();
+
+# === run to expose local server to mobile devices ===
+# ngrok http 5000 --region=ap
+
+# === run the tracker ===
+# python tracker.py

@@ -1,0 +1,14 @@
+# Local Database / Log Files
+watch_history.txt
+
+# Python Cache
+__pycache__/
+*.py[cod]
+
+# Virtual Environments (If you use them later)
+venv/
+env/
+
+# OS generated files
+.DS_Store
+Thumbs.db
