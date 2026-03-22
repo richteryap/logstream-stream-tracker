@@ -2,9 +2,13 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from datetime import datetime
 import gspread
+import pytz
 
 app = Flask(__name__)
 CORS(app)
+
+# Define your timezone
+TIMEZONE = pytz.timezone('Asia/Manila')
 
 try:
     gc = gspread.service_account(filename='credentials.json')
@@ -38,13 +42,15 @@ def receive_update():
         
         # check duplicate title in the database (Column B)
         if stream_title in existing_titles:
-            print("Duplicate title detected in database. Skipping entry.")
+            print(f"Duplicate title detected in database. Skipping entry: {stream_title}.")
         else:
-            current_time = datetime.now().strftime("%Y-%m-%d %I:%M %p")
+            utc_now = datetime.now(pytz.utc)
+            time_now = utc_now.astimezone(TIMEZONE)
+            current_time = time_now.strftime("%Y-%m-%d %I:%M %p")
             
             # Append a new row to the bottom of the sheet: [Column A, Column B]
             db.append_row([current_time, stream_title])
-            print("Successfully saved to Google Sheets!")
+            print(f"Saved to Sheets: {stream_title} at {current_time}")
             
     except Exception as e:
         print("Failed to push to database:", e)

@@ -1,6 +1,7 @@
 Flask
 Flask-Cors
 gspread
+pytz
 
 # === activate virtual environment ===
 # python -m venv .venv
