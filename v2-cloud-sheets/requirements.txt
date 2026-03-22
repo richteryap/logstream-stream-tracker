@@ -1,0 +1,15 @@
+Flask
+Flask-Cors
+gspread
+
+# === activate virtual environment ===
+# python -m venv .venv
+
+# === install dependencies ===
+# pip install -r requirements.txt
+
+# === bookmarklet for mobile ===
+#javascript:(function(){let htmlElement=document.querySelector('.linetitle3');if(htmlElement){let rawTitle=htmlElement.innerText;let cleanTitle=rawTitle.replace(/"/g,'').replace(/\n/g,' ').replace(/\s+/g,' ').trim();fetch('https://YOUR_PYTHONANYWHERE_USERNAME.pythonanywhere.com/stream-update',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:cleanTitle})}).then(response=>alert("Beamed straight to the Cloud Database!")).catch(error=>alert("Network Error. Is PythonAnywhere running?"));}else{alert("Title not found.");}})();
+
+# === run the tracker ===
+# python tracker.py
