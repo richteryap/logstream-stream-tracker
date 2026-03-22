@@ -126,6 +126,3 @@ javascript:(function(){let htmlElement=document.querySelector('.linetitle3');if(
 
 3. When on the target page, tap the address bar, search for *Track Stream*, and tap the bookmark to securely bridge the payload to your local server.
 
----
-## Author
-**Richter Anthony P. Yap**
