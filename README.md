@@ -6,13 +6,15 @@ An event-driven, fullstack tracking architecture that scrapes DOM elements and l
 
 ## Technical Highlights
 * **Hybrid Deployment:** Supports both **Local Development** (Ngrok tunneling) and **Cloud Production** (PythonAnywhere) environments.
-* **Dual-Engine Logging:** Modular backend supports logging to a persistent local `.txt` file or a structured **Google Sheets Database**.
+* **Dual-Sheet Database Architecture (Cloud):** A modular backend that splits data routing into two streams: a raw chronological watch history (Sheet 1) and an auto-updating Library (Sheet 2) that tracks the highest watched episode per show.
+* **API Optimization:** Implements batched API request payloads (update with values) to bypass Google Sheets API rate limits (403 limits) during rapid testing or binge-watching.
+* **Dynamic Formula Injection:** Server-side evaluation bypasses standard text insertion by passing USER_ENTERED options to Google's API, natively injecting conditional formatting formulas (e.g., automatically calculating "Watching" vs "Completed" status based on human-inputted episode totals).
+* **Regex Parsing:** Automatically extracts and separates show titles from episode numbers using Python's re module.
 * **Timezone Aware:** Implements `pytz` localization to ensure logs match the user's local time (Asia/Manila) regardless of server location.
-* **Cross-Device Architecture:** Bridges the gap between PC extensions and mobile bookmarklets using a unified Flask API.
-* **CORS & Security:** Robust handling of preflight `OPTIONS` requests and HTTPS mixed-content policies.
+* **CORS & Security:** Robust handling of preflight `OPTIONS` requests and HTTPS mixed-content policies via Flask-CORS `@cross_origin` wrappers to prevent mobile browser connection drops.
 
 ## Tech Stack
-* **Backend:** Python 3.13, Flask, Flask-CORS
+* **Backend:** Python 3.13, Flask, Flask-CORS, Regex (re)
 * **Database:** Google Sheets API (`gspread`), Local File I/O
 * **Deployment:** PythonAnywhere, Ngrok (for local testing)
 * **Frontend:** Vanilla JavaScript, Chrome Extension MV3, Web Bookmarklets
@@ -35,6 +37,9 @@ To use the Google Sheets engine:
 1. Enable **Google Drive** and **Google Sheets** APIs in the Google Cloud Console.
 2. Create a **Service Account**, download the JSON key, and rename it to *credentials.json*.
 3. Create a Google Sheet named *Stream Tracker* and share it with the Service Account email as an **Editor**.
+4. **Sheet Structure Required:**
+    * **Sheet1:** Acts as the chronological log.
+    * **Sheet2:** Acts as the Library. Column A (Title), Column B (Episode), Column C (Time), Column D (Status Formula - Auto-injected by Python), Column E (Assumed Total Episodes - Manual human input).
 
 
 ---
@@ -124,5 +129,5 @@ Because privacy-focused mobile browsers (like Brave) block standard extensions, 
 javascript:(function(){let htmlElement=document.querySelector('.linetitle3');if(htmlElement){let rawTitle=htmlElement.innerText;let cleanTitle=rawTitle.replace(/"/g,'').replace(/\n/g,' ').replace(/\s+/g,' ').trim();fetch('https://YOUR_URL.pythonanywhere.com/stream-update',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:cleanTitle})}).then(response=>alert("Beamed to database!")).catch(error=>alert("Network Error. Is the server running?"));}else{alert("Title not found.");}})();
 ```
 
-3. When on the target page, tap the address bar, search for *Track Stream*, and tap the bookmark to securely bridge the payload to your local server.
+3. When on the target page, tap the address bar, search for *Track Stream*, and tap the bookmark to securely bridge the payload to your local server or cloud server.
 
