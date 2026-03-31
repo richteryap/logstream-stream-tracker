@@ -1,24 +1,14 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from datetime import datetime
 
 app = Flask(__name__)
-CORS(app) 
+CORS(app)
 
-@app.after_request
-def add_cors_headers(response):
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
-    response.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
-    response.headers['Access-Control-Allow-Private-Network'] = 'true'
-    return response
-
-@app.route('/stream-update', methods=['POST', 'OPTIONS'])
+@app.route('/stream-update', methods=['POST'])
+@cross_origin()
 def receive_update():
-    if request.method == 'OPTIONS':
-        return '', 204
-        
-    data = request.json
+    data = request.get_json(silent=True) or {}
     stream_title = data.get('title', 'Unknown Title')
     
     print(f"Watching \"{stream_title}.\"")
@@ -32,6 +22,7 @@ def receive_update():
         print("Successfully saved to watch_history.txt!")
     except Exception as e:
         print("Failed to save to text file:", e)
+        return jsonify({"status": "error", "message": str(e)}), 500
     # ====================================================
     
     return jsonify({"status": "success"})
