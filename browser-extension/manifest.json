@@ -2,7 +2,20 @@
   "manifest_version": 3,
   "name": "LogStream",
   "version": "1.1",
-  "description": "A configurable DOM scraper that securely beams media titles to a Python API.",
+  "description": "Manual Media Stream Tracker",
+  "permissions": [
+    "activeTab",
+    "notifications"
+  ],
+  "icons": {
+    "16": "icon.png",
+    "32": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
