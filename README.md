@@ -7,6 +7,7 @@ An event-driven, fullstack tracking architecture that scrapes DOM elements and l
 ## Technical Highlights
 * **Hybrid Deployment:** Supports both **Local Development** (Ngrok tunneling) and **Cloud Production** (PythonAnywhere) environments.
 * **Dual-Sheet Database Architecture (Cloud):** A modular backend that splits data routing into two streams: a raw chronological watch history (Sheet 1) and an auto-updating Library (Sheet 2) that tracks the highest watched episode per show.
+* **Manual Desktop Trigger:** Transitioned from automatic DOM scraping to a user-controlled popup UI with native OS notifications, preventing accidental logging of dropped shows.
 * **API Optimization:** Implements batched API request payloads (update with values) to bypass Google Sheets API rate limits (403 limits) during rapid testing or binge-watching.
 * **Dynamic Formula Injection:** Server-side evaluation bypasses standard text insertion by passing USER_ENTERED options to Google's API, natively injecting conditional formatting formulas (e.g., automatically calculating "Watching" vs "Completed" status based on human-inputted episode totals).
 * **Regex Parsing:** Automatically extracts and separates show titles from episode numbers using Python's re module.
@@ -17,7 +18,7 @@ An event-driven, fullstack tracking architecture that scrapes DOM elements and l
 * **Backend:** Python 3.13, Flask, Flask-CORS, Regex (re)
 * **Database:** Google Sheets API (`gspread`), Local File I/O
 * **Deployment:** PythonAnywhere, Ngrok (for local testing)
-* **Frontend:** Vanilla JavaScript, Chrome Extension MV3, Web Bookmarklets
+* **Frontend:** Vanilla JavaScript, HTML/CSS, Chrome Extension MV3, Web Bookmarklets
 
 ---
 
@@ -118,7 +119,7 @@ pip3.13 install --user flask-cors gspread pytz
 1. Navigate to brave://extensions/ or chrome://extensions/.
 2. Enable **Developer mode** in the top right.
 3. Click **Load unpacked** and select the extension folder in this repository.
-4. The extension will automatically detect and log the configured DOM element upon page load.
+4. When watching an episode, click the **LogStream** extension icon in your browser toolbar and click **"Log Episode"** to manually trigger the payload and receive an OS-level confirmation notification.
 
 **Mobile (Brave/Chrome Android)**
 Because privacy-focused mobile browsers (like Brave) block standard extensions, this utilizes a custom JS Bookmarklet payload.
@@ -130,4 +131,3 @@ javascript:(function(){let htmlElement=document.querySelector('.linetitle3');if(
 ```
 
 3. When on the target page, tap the address bar, search for *Track Stream*, and tap the bookmark to securely bridge the payload to your local server or cloud server.
-
